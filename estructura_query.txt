@@ -1,0 +1,101 @@
+### Estructura básica de Query ###
+SELECT Seleccione.
+count([columna]) Contar los atributos.
+FROM [esquema].[tabla] De la tabla del esquema.
+group by [atributo] Agrupar por columna.
+order by [columna] asc Ordenar de forma ascendente.
+show columns from [esquema].[tabla] Mostrar columnas del esquema.
+
+
+select * from nombre_bd.nombre_tabla; //el * es para seleccionar todo
+ejemplos con sakila
+
+select * from sakila.actor;
+select * from sakila.customer;
+select * from sakila.country;
+
+### Query en varias tablas ###
+//select valor1, valor2 from nombre_bd.nombre_tabla;//
+
+select last_name, first_name, actor_id, from sakila.actor order by last_name asc; //ordena por apellido en manera ascendente
+show columns from sakila.actor //para que muestre 
+
+### Manera de agrupar con función COUNT###
+select last_name, COUNT (first_name)
+from sakila.actor group by last_name order by last_name asc; 
+
+show columns from sakila.actor;
+//Selecciona el apellido, cuenta cuantos nombres existen en la tabla sakila.actor y lo agrupa por apellido en manera ascendente
+
+### Contar cual es el apellido que más se repite ###
+SELECT last_name, COUNT (first_name)
+FROM sakila.actor GROUP BY by last_name
+ORDER BY COUNT (first_name) desc; //puede ser asc o desc 
+
+### Seleccionar 2 datos de 2 tablas diferentes###
+SELECT customer.first_name, adress.address
+FROM sakila.customer, sakila.adress;
+
+### Seleccionar 2 datos de 2 tablas diferentes y los filtra###
+SELECT C.first_name, A.address
+FROM sakila.customer AS C, sakila.adress AS A
+WHERE C.address_id=A.address_id; //AS le da un sobrenombre a las tablas
+para poder después filtrarlas por los id_address 
+
+### filtra de 2 tablas diferentes por nombre dirección y email ###
+SELECT C.first_name, C.email A.address
+FROM sakila.customer AS C, sakila.adress AS A
+WHERE C.address_id=A.address_id;
+
+### Selecciona un dato único de una tabla en general ###
+SELECT DISTINCT first_name FROM sakila.actor ORDER BY first_name;
+
+### Hace una consulta por nombre apellido dirección y ciudad con un doble filtro por id de ciudad y dirección ###
+SELECT C.first_name, C.last_name A.address C.city 
+FROM sakila.customer AS C, sakila.adress AS A, sakila.city AS CY 
+WHERE C.address_id=A.address_id AND A.city_id = CY.city_id;
+
+### Query para saber cuantas direcciones tiene cada ciudad ###
+SELECT C.city, count(A.address) FROM sakila.city as C, sakila.address as A
+WHERE A.city_id = C.city_id GROUP BY A.city_id
+
+### selecciona todo de una tabla que se parezca a un texto ZO ###
+SELECT * FROM sakila.film_text 
+WHERE title LIKE 'zo%';
+
+### hace un query con una exclusión de texto ZO ###
+SELECT * FROM sakila.film_text 
+WHERE title NOT LIKE 'zo%';
+
+### agrega columnas a una tabla ###
+SHOW COLUMNS FROM sakila.film_text;
+ALTER TABLE sakila.film_text ADD COLUMN fecha_lanza timestamp;
+
+### dropea columnas de una tabla ###
+ALTER TABLE sakila.film_text DROP COLUMN fecha_lanza;
+
+### actualiza el valor de un registro ###
+UPDATE sakila.film_text SET title = "FER MOVIE" WHERE film_id=2
+
+### Inserta y Borra un nuevo dato dentro de una tabla ###
+INSERT INTO sakila.film_text VALUES (10002 'Patzi Serie', 'Aventura' '2016-06-21 01:45:45');
+DELETE FROM sakila.film_text WHERE film_id=10002
+
+
+#### JASON en BA ####
+Objeto:
+
+passanger = {
+nombre: “Julian”,
+apellido: “Alvarez”,
+email: “prueba@platzi.com”,
+dirección: [ { dir: “platzi” }, { dir: “appstartup”}]
+}
+
+Inserción (Crear Colección):
+
+use passanger
+
+Guardar En La DB (Crear Commit):
+
+db.nombre_DB.save(passanger)
